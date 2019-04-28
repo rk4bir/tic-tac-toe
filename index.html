@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/icon.png" />
+	<title>Tic Tac Toe</title>
+</head>
+<body>
+	<div class="container-fluid" style="background: #105e00; opacity: 0.92">
+		<div class="container">
+			<!-- TITLE -->
+			<h1 class="text-center pt-4 font-weight-bold">
+				<span class='text-danger' >Tic</span > <span class="text-white">Tac</span> <span class="text-warning">Toe</span>
+			</h1>
+			<hr style="height: 0px; border: 1px solid white">
+			<!-- GAME LEVEL SELECT -->
+			<div class="input-group mt-4">
+				<button style="border-radius: 0" 
+					class="btn btn-sm bg-white font-weight-bold">Difficulty: </button>
+				<button id="easy" onclick="set_difficulty(this.value);" 
+					value='0' style="border-radius: 0"
+					class="btn btn-sm btn-success">Easy</button>
+				<button id="medium" onclick="set_difficulty(this.value);" 
+					value='0.5' style="border-radius: 0"
+					class="btn btn-sm btn-danger">Medium</button>
+				<button id="hard" onclick="set_difficulty(this.value);" 
+					value="1" style="border-radius: 0" 
+					class="btn btn-sm btn-danger">Hard</button>
+			</div>
+			<!-- 2D GRID PLAYGROUND -->
+			<div class="pt-4">
+				<div class="card-body d-flex justify-content-center">
+					<table class="grid-table">
+						<tr class="row1">
+							<td role='button' onclick="player_turn(this.id)" id="row1-col1"></td>
+							<td role='button' onclick="player_turn(this.id)" id="row1-col2"></td>
+							<td role='button' onclick="player_turn(this.id)" id="row1-col3"></td>
+						</tr>
+						<tr class="row2">
+							<td role='button' onclick="player_turn(this.id)" id="row2-col1"></td>
+							<td role='button' onclick="player_turn(this.id)" id="row2-col2"></td>
+							<td role='button' onclick="player_turn(this.id)" id="row2-col3"></td>
+						</tr>
+						<tr class="row3">
+							<td role='button' onclick="player_turn(this.id)" id="row3-col1"></td>
+							<td role='button' onclick="player_turn(this.id)" id="row3-col2"></td>
+							<td role='button' onclick="player_turn(this.id)" id="row3-col3"></td>
+						</tr>
+					</table>
+				</div>
+				<div style="font-size: 16px" class="mt-4 text-white text-center font-weight-bold">
+					[?]&nbsp;&nbsp;<span id="info"></span>
+				</div>
+			</div>
+		</div>
+
+		<!-- 
+		<div class="modal fade" id="result-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLongTitle">
+							TIC-TAC-TOE RESULT
+						</h5>
+						<button type="button" class="close" 
+							data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						result detail will be here...
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" 
+							data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">
+							Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#result-	">
+		  Launch demo modal
+		</button> -->
+	</div>
+	
+	<script type="text/javascript" src="assets/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/game.js"></script>
+	<script type="text/javascript">
+		$('.container-fluid').css('height', $(window).height());
+		$(document).ready(function(){
+			
+		});
+	</script>
+</body>
+</html>

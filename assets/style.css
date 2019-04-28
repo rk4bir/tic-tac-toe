@@ -1,0 +1,43 @@
+html, body{
+	background: 50% 50% no-repeat;
+	background-image: url('bg.png');
+	background-color: yellow;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-attachment: fixed;}
+
+.grid-table{
+	height: 240px;
+	width: 240px; /* each row 240px width with 80px each col */}
+
+#row1-col1, #row1-col2, #row1-col3, 
+#row2-col1, #row2-col2, #row2-col3, 
+#row3-col1, #row3-col2, #row3-col3{
+	height: 80px!important;
+	width: 80px!important;
+	font-size: 45px;
+	text-align: center;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#row1-col2{
+	border-right: 6px solid #43993e;
+	border-left: 6px solid #43993e;}
+
+#row2-col2{
+	border: 6px solid #43993e;}
+
+#row2-col1{
+	border-top: 6px solid #43993e;
+	border-bottom: 6px solid #43993e;}
+
+#row3-col2{
+	border-left: 6px solid #43993e;
+	border-right: 6px solid #43993e;}
+
+#row2-col3{
+	border-top: 6px solid #43993e;
+	border-bottom: 6px solid #43993e;}
