@@ -369,17 +369,22 @@ function medium_level(){
 			[r, c] = check_for_win_play(BOT_SYMBOL)
 			GRID[r][c] = BOT_SYMBOL
 			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+			TURN_NUMBER++
 			return null
 		}
-		// Check for a Player win and block it
-		if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
-			[r, c] = check_for_win_play(PLAYER_SYMBOL)
-			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
-			return null
+		if ( TURN_NUMBER < 3 ){
+			// Check for a Player win and block it
+			if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
+				[r, c] = check_for_win_play(PLAYER_SYMBOL)
+				GRID[r][c] = BOT_SYMBOL
+				$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+				TURN_NUMBER++
+				return null
+			}
 		}
 		// Try for a random foolish move
 		make_a_foolish_move()
+		TURN_NUMBER++
 		return null
 	}
 }
