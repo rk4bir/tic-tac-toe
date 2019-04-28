@@ -496,7 +496,7 @@ function player_turn(ID){
 			}
 		}else{
 			// show position is already filled
-			$('#info').html("Position already filled.")
+			alert("Position already filled.")
 		}
 	}else{
 		alert("Game is over!")
