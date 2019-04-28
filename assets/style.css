@@ -8,6 +8,10 @@ html, body{
 	background-size: cover;
 	background-attachment: fixed;}
 
+.container-fluid{
+	background: #105e00; 
+	opacity: 0.92}
+
 .grid-table{
 	height: 240px;
 	width: 240px; /* each row 240px width with 80px each col */}
