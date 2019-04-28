@@ -3,6 +3,8 @@
 // Track BOT's turn
 BOT_TURN = false
 
+GAME_OVER = false
+
 // BOT turn no. track
 TURN_NUMBER = 0
 
@@ -141,11 +143,11 @@ function game_over_check(){
 
 function post_game_over_action(symbol) {
 	if ( symbol == EMPTY_SYMBOL ){
-		$("#info").html("Draw! Whatta match!<br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+		$("#info").html("Draw! Whatta match!<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
 	}else if ( symbol == BOT_SYMBOL ){
-		$('#info').html("Ahha! Bot won the game.<br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+		$('#info').html("Ahha! Bot won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
 	}else if ( symbol == PLAYER_SYMBOL ) {
-		$('#info').html("Congrats! You won the game.<br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+		$('#info').html("Congrats! You won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
 	}
 }
 
@@ -173,6 +175,7 @@ function clean_frontend_grid(){
 
 function restart_game(){
 	BOT_TURN = 0
+	GAME_OVER = false
 	clean_backend_grid()
 	clean_frontend_grid()
 }
@@ -425,6 +428,8 @@ function get_selector_from_rc(r, c){
 
 // HANDLES DIFFICULTY SETTING 
 function set_difficulty(value){
+	GAME_OVER = false
+	TURN_NUMBER = 0
 	if ( value == '1' ){ // hard
 		$('#hard').removeClass('btn-danger');
 		$('#hard').addClass('btn-success');
@@ -467,28 +472,34 @@ function player_turn(ID){
 		allow to make change only if it's player's 
 		and not bot's turn
 	*/
-	[r, c] = get_rc_from_selector(ID) // target position
-	if ( GRID[r][c] == '?' ) {
-		GRID[r][c] = PLAYER_SYMBOL;
-		// set tick icon for player
-		$('#'+ID).addClass('text-white').html('&#10004;')
-		// if game over
-		if ( game_over_check() != null ) { 
-			// passing output symbol
-			post_game_over_action(game_over_check()[0])
-			return
-		}
-		// bot play
-		bot_play();
-		// if game over
-		if ( game_over_check() != null ) {
-			// passing output symbol
-			post_game_over_action(game_over_check()[0])
-			return
+	if( !GAME_OVER ){
+		[r, c] = get_rc_from_selector(ID) // target position
+		if ( GRID[r][c] == '?' ) {
+			GRID[r][c] = PLAYER_SYMBOL;
+			// set tick icon for player
+			$('#'+ID).addClass('text-white').html('&#10004;')
+			// if game over
+			if ( game_over_check() != null ) { 
+				GAME_OVER = true
+				// passing output symbol
+				post_game_over_action(game_over_check()[0])
+				return
+			}
+			// bot play
+			bot_play();
+			// if game over
+			if ( game_over_check() != null ) {
+				GAME_OVER = true
+				// passing output symbol
+				post_game_over_action(game_over_check()[0])
+				return
+			}
+		}else{
+			// show position is already filled
+			$('#info').html("Position already filled.")
 		}
 	}else{
-		// show position is already filled
-		$('#info').html("Position already filled.")
+		alert("Game is over!")
 	}
 	return
 }
