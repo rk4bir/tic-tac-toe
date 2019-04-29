@@ -1,33 +1,16 @@
 // ======================= GLOABAL VARIABLES =========================
 
-// Track BOT's turn
-BOT_TURN = false
 
-GAME_OVER = false
-
-// BOT turn no. track
-TURN_NUMBER = 0
-
-// Game level
+var GAME_OVER = false
+var TURN_NUMBER = 0
 var LEVEL = 0
-
-// Symbols
 var PLAYER_SYMBOL = '1'
 var BOT_SYMBOL = '0'
 var EMPTY_SYMBOL = '?'
-
-// The board GRID
 var GRID = [[EMPTY_SYMBOL, EMPTY_SYMBOL, EMPTY_SYMBOL], [EMPTY_SYMBOL, EMPTY_SYMBOL, EMPTY_SYMBOL], 
 			[EMPTY_SYMBOL, EMPTY_SYMBOL, EMPTY_SYMBOL]]
-
-
-// Corners
 var CORNERS = [ [0, 0], [0, 2], [2, 0], [2,2] ]
-
-// Middles
 var MIDDLES = [ [0, 1], [1, 0], [1, 2], [2, 1] ]
-
-// Numeric positions on the 2D GRID playground
 var POSITIONS = { 1: [0, 0], 2: [0, 1], 3: [0, 2], 4: [1, 0], 
 				5: [1, 1], 6: [1, 2], 7: [2, 0], 8: [2, 1], 9: [2, 2] }
 
@@ -157,7 +140,6 @@ function clean_backend_grid(){
 			GRID[r][c] = EMPTY_SYMBOL
 		}
 	}
-	TURN_NUMBER = 0
 }
 
 function clean_frontend_grid(){
@@ -174,7 +156,7 @@ function clean_frontend_grid(){
 }
 
 function restart_game(){
-	BOT_TURN = 0
+	TURN_NUMBER = 0
 	GAME_OVER = false
 	clean_backend_grid()
 	clean_frontend_grid()
@@ -392,6 +374,15 @@ function medium_level(){
 	}
 }
 
+// ==================== MEDIUM LEVEL PLAY FUNCTION ===================
+
+
+
+
+
+
+
+
 
 // PLAY ACCORDING TO CURRENT LEVEL
 function bot_play(turn){
@@ -428,33 +419,21 @@ function get_selector_from_rc(r, c){
 
 // HANDLES DIFFICULTY SETTING 
 function set_difficulty(value){
-	GAME_OVER = false
-	TURN_NUMBER = 0
 	if ( value == '1' ){ // hard
-		$('#hard').removeClass('btn-danger');
-		$('#hard').addClass('btn-success');
-		$('#medium').removeClass('btn-success');
-		$('#medium').addClass('btn-danger');
-		$('#easy').removeClass('btn-success');
-		$('#easy').addClass('btn-danger');
+		$('#hard').removeClass('btn-danger').addClass('btn-success');
+		$('#medium').removeClass('btn-success').addClass('btn-danger');
+		$('#easy').removeClass('btn-success').addClass('btn-danger');
 	}else if ( value == '0') { // easy
-		$('#easy').removeClass('btn-danger');
-		$('#easy').addClass('btn-success');
-		$('#medium').removeClass('btn-success');
-		$('#medium').addClass('btn-danger');
-		$('#hard').removeClass('btn-success');
-		$('#hard').addClass('btn-danger');
+		$('#easy').removeClass('btn-danger').addClass('btn-success');
+		$('#medium').removeClass('btn-success').addClass('btn-danger');
+		$('#hard').removeClass('btn-success').addClass('btn-danger');
 	}else{	// medium
-		$('#medium').removeClass('btn-danger');
-		$('#medium').addClass('btn-success');
-		$('#hard').removeClass('btn-success');
-		$('#hard').addClass('btn-danger');
-		$('#easy').removeClass('btn-success');
-		$('#easy').addClass('btn-danger');
+		$('#medium').removeClass('btn-danger').addClass('btn-success');
+		$('#hard').removeClass('btn-success').addClass('btn-danger');
+		$('#easy').removeClass('btn-success').addClass('btn-danger');
 	}
 	LEVEL = Number(value);
-	clean_backend_grid()
-	clean_frontend_grid()
+	restart_game()
 	if ( LEVEL == 1 ) {
 		console.log("Hard");
 	}else if ( LEVEL == 0 ) {
