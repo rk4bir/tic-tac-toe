@@ -8,6 +8,8 @@ html, body{
 	background-size: cover;
 	background-attachment: fixed;}
 
+h1{font-size: 35px}
+
 .container-fluid{
 	background: #105e00; 
 	opacity: 0.92}

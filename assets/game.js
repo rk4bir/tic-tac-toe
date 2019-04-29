@@ -1,6 +1,3 @@
-// ======================= GLOABAL VARIABLES =========================
-
-
 var GAME_OVER = false
 var TURN_NUMBER = 0
 var LEVEL = 0
@@ -13,22 +10,15 @@ var CORNERS = [ [0, 0], [0, 2], [2, 0], [2,2] ]
 var MIDDLES = [ [0, 1], [1, 0], [1, 2], [2, 1] ]
 var POSITIONS = { 1: [0, 0], 2: [0, 1], 3: [0, 2], 4: [1, 0], 
 				5: [1, 1], 6: [1, 2], 7: [2, 0], 8: [2, 1], 9: [2, 2] }
-
 // ======================= GLOABAL VARIABLES =========================
 
 
-
-
-
-
-
-
-// =========== RANDOM NUMBER AND CHOICE MAKING FUNCTION ==============
-
+// Generate random integer in between & including min-max
 function randint(min, max) {
     return Math.floor(Math.random() * (max+1 - min) + min);
 }
 
+// Returns array length
 function array_len(ARRAY){
 	var len = 0;
 	for ( var el in ARRAY ){
@@ -37,354 +27,14 @@ function array_len(ARRAY){
 	return len
 }
 
+// Gives a random corner position
 function random_corner_choice(){
 	var min = 0
 	var max = array_len(CORNERS) - 1
 	return CORNERS[randint(min, max)]
 }
 
-// =========== RANDOM NUMBER AND CHOICE MAKING FUNCTION ==============
-
-
-
-
-
-
-
-
-
-/*=====================GAME OVER CHECK FUNCTIONS======================*/
-
-function row_check(){
-	/*
-		Check all rows whether the row is filled with same icon/symbol,
-		return won symbol and true or '' and false as a list
-	*/
-	for(var r=0; r<3; ++r){
-		if ( GRID[r][0] == GRID[r][1] && GRID[r][0] == GRID[r][2] && GRID[r][2] != EMPTY_SYMBOL ) {
-			return [GRID[r][0], true]
-		}
-	}
-	return null
-}
-
-function col_check(){
-	/*	
-		Check all coloumns whether the it is filled with same icon/symbol. 
-		return won symbol and true or '' and false as a list
-	*/
-	for(var c=0; c<3; ++c){
-		if (GRID[0][c] == GRID[1][c] && GRID[0][c] == GRID[2][c] && GRID[2][c] != EMPTY_SYMBOL ) {
-			return [GRID[0][c], true]
-		}
-	}
-	return null
-}
-
-function diagonal_check(){
-	/*
-	    Check whether the GRID has same symbol/icon along it's two diagonals.
-	    return won symbol and true or '' and false as a list
-	*/
-	var d1 = GRID[0][0] == GRID[1][1] && GRID[0][0] == GRID[2][2] && GRID[2][2] != EMPTY_SYMBOL
-	var d2 = GRID[0][2] == GRID[1][1] && GRID[0][2] == GRID[2][0] && GRID[2][0] != EMPTY_SYMBOL
-	if ( d1 || d2 ) {
-		return [ GRID[1][1], true ]
-	}
-	return null
-}
-
-function game_over_check(){
-	/*
-	    Checks whether the game is over. If game is over, then prints the 
-	    result and exit the game.
-	    ['symbol', ture or false]
-	    true means game is over
-	*/
-	if ( row_check() != null ){
-		return row_check(); // returns [symbol, true]
-	}
-	if ( col_check() != null ){
-		return col_check() // returns [symbol, true]
-	}
-	if ( diagonal_check() != null ){
-		return diagonal_check() // returns [symbol, true]
-	}
-	
-	// Checks whether any empty space is found
-	// meaning if empty is still in grid play must go on
-	// that's why it return without closing the game
-	for (var r=0; r<3; ++r) {
-		for (var c=0; c<3; ++c) {
-			if ( GRID[r][c] == EMPTY_SYMBOL ) {
-				return null
-			}
-		}
-	}
-	return [EMPTY_SYMBOL, true]
-}
-
-function post_game_over_action(symbol) {
-	if ( symbol == EMPTY_SYMBOL ){
-		$("#info").html("Draw! tight game!<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
-	}else if ( symbol == BOT_SYMBOL ){
-		$('#info').html("Whoaa! Bot won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
-	}else if ( symbol == PLAYER_SYMBOL ) {
-		$('#info').html("Wow! You won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
-	}
-}
-
-function clean_backend_grid(){
-	for ( var r=0; r<3; ++r ) {
-		for (var c = 0; c<3; ++c) {
-			GRID[r][c] = EMPTY_SYMBOL
-		}
-	}
-}
-
-function clean_frontend_grid(){
-	$('#info').html('')
-	$('#row1-col1').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row1-col2').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row1-col3').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row2-col1').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row2-col2').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row2-col3').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row3-col1').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row3-col2').removeClass('text-warning').removeClass('text-white').html('')
-	$('#row3-col3').removeClass('text-warning').removeClass('text-white').html('')
-}
-
-function restart_game(){
-	TURN_NUMBER = 0
-	GAME_OVER = false
-	clean_backend_grid()
-	clean_frontend_grid()
-}
-/*=====================GAME OVER CHECK FUNCTIONS======================*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-// =============== POSSIBLE WIN MOVE HELPER FUNCTIONS ======================
-
-function check_for_a_row_win(r, symbol){
-	if ( GRID[r][0] == symbol && GRID[r][1] == symbol && GRID[r][2] == EMPTY_SYMBOL ) return [r, 2]
-	if ( GRID[r][0] == symbol && GRID[r][2] == symbol && GRID[r][1] == EMPTY_SYMBOL ) return [r, 1]
-	if ( GRID[r][1] == symbol && GRID[r][2] == symbol && GRID[r][0] == EMPTY_SYMBOL ) return [r, 0]
-	return null
-}
-
-function check_for_a_col_win(c, symbol){
-	if ( GRID[0][c] == symbol && GRID[1][c] == symbol && GRID[2][c] == EMPTY_SYMBOL ) return [2, c]
-	if ( GRID[0][c] == symbol && GRID[2][c] == symbol && GRID[1][c] == EMPTY_SYMBOL ) return [1, c]
-	if ( GRID[1][c] == symbol && GRID[2][c] == symbol && GRID[0][c] == EMPTY_SYMBOL ) return [0, c]
-	return null
-}
-
-function check_for_a_diagonal_win(symbol){
-	// Diagonal 1
-	if ( GRID[0][0] == symbol && GRID[1][1] == symbol && GRID[2][2] == EMPTY_SYMBOL ) return [2, 2]
-	if ( GRID[0][0] ==  symbol && GRID[2][2] == symbol && GRID[1][1] == EMPTY_SYMBOL ) return [1, 1]
-	if ( GRID[1][1] == symbol && GRID[2][2] == symbol && GRID[0][0] == EMPTY_SYMBOL ) return [0, 0]
-	// Diagonal 2
-	if ( GRID[0][2] == symbol && GRID[1][1] == symbol && GRID[2][0] == EMPTY_SYMBOL ) return [2, 0]
-	if ( GRID[0][2] == symbol && GRID[2][0] == symbol && GRID[1][1] == EMPTY_SYMBOL ) return [1, 1]
-	if ( GRID[1][1] == symbol && GRID[2][0] == symbol && GRID[0][2] == EMPTY_SYMBOL ) return [0, 2]
-	return null
-}
-
-function check_for_win_play(symbol){
-	for ( var row=0; row<3; ++row ){
-		row_ck = check_for_a_row_win(row, symbol)
-		if ( row_ck != null ) return row_ck
-	}
-	for ( var col=0; col<3; ++col ){
-		col_ck = check_for_a_col_win(col, symbol)
-		if ( col_ck != null ) return col_ck
-	}
-	diag_ck = check_for_a_diagonal_win(symbol)
-	if ( diag_ck != null ) return diag_ck
-	return null
-}
-
-// =============== POSSIBLE WIN MOVE HELPER FUNCTIONS ======================
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ========================= HARD LEVEL PLAY FUNCTIONS =====================
-
-function progressive_play(){
-	if ( GRID[0][0] == GRID[2][2] && GRID[0][0] == PLAYER_SYMBOL ) {
-		$('#'+get_selector_from_rc(1,0)).addClass('text-warning').html('&#10008;')
-		GRID[1][0] = BOT_SYMBOL; return
-	}
-	if ( GRID[0][2] == GRID[2][0] && GRID[0][2] == PLAYER_SYMBOL ) {
-		$('#'+get_selector_from_rc(1,2)).addClass('text-warning').html('&#10008;')
-		GRID[1][2] = BOT_SYMBOL; return
-	}
-	for(var index in CORNERS){
-		[r, c] = CORNERS[index]
-		if ( GRID[r][c] == EMPTY_SYMBOL ){
-			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
-			return
-		}
-	}
-	for(var index in MIDDLES){
-		[r, c] = MIDDLES[index]
-		if ( GRID[r][c] == EMPTY_SYMBOL ) {
-			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
-			return
-		}
-	}
-}
-
-function hard_level(){
-	// BOT play for level => hard
-	// First turn
-	if ( TURN_NUMBER == 0 ) {
-		if ( GRID[1][1] == PLAYER_SYMBOL ) {
-			[r, c] = random_corner_choice()
-			GRID[r][c] = BOT_SYMBOL
-			selector = get_selector_from_rc(r,c)
-		}else{
-			GRID[1][1] = BOT_SYMBOL
-			selector = get_selector_from_rc(1,1)
-		}
-		TURN_NUMBER++
-		$('#'+selector).addClass('text-warning').html('&#10008;') // cross icon
-		return null
-	}else{
-		// Attempt for a BOT win
-		if ( check_for_win_play(BOT_SYMBOL) != null ) {
-			[r, c] = check_for_win_play(BOT_SYMBOL)
-			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
-			return null
-		}
-		// Check for a Player win and block it
-		if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
-			[r, c] = check_for_win_play(PLAYER_SYMBOL)
-			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
-			return null
-		}
-		// Try for a progressive win play
-		progressive_play()
-		return null
-	}
-}
-
-// ========================= HARD LEVEL PLAY FUNCTIONS =====================
-
-
-
-
-
-
-
-
-
-// EASY LEVEL PLAY FUNCTION
-function easy_level(){
-	// BOT play for level => easy
-	while (true){
-		[r, c] = POSITIONS[randint(1,9)]
-		if ( GRID[r][c] == EMPTY_SYMBOL ){
-			GRID[r][c] = BOT_SYMBOL;
-			$('#'+get_selector_from_rc(r, c)).addClass('text-warning').html('&#10008;')
-			return
-		}
-	}
-}
-
-
-// ==================== MEDIUM LEVEL PLAY FUNCTION ===================
-
-function make_a_foolish_move() {
-	while (true) {
-		[r, c] = POSITIONS[randint(1,9)]
-		if ( GRID[r][c] == EMPTY_SYMBOL ){
-			GRID[r][c] = BOT_SYMBOL;
-			$('#'+get_selector_from_rc(r, c)).addClass('text-warning').html('&#10008;')
-			return
-		}
-	}
-}
-
-function medium_level(){
-	// BOT play for level => medimu
-	// First turn
-	if ( TURN_NUMBER == 0 ) {
-		if ( GRID[1][1] == PLAYER_SYMBOL ) {
-			[r, c] = random_corner_choice()
-			GRID[r][c] = BOT_SYMBOL
-			selector = get_selector_from_rc(r,c)
-		}else{
-			GRID[1][1] = BOT_SYMBOL
-			selector = get_selector_from_rc(1,1)
-		}
-		TURN_NUMBER++
-		$('#'+selector).addClass('text-warning').html('&#10008;') // cross icon
-		return null
-	}else{
-		// Attempt for a BOT win
-		if ( check_for_win_play(BOT_SYMBOL) != null ) {
-			[r, c] = check_for_win_play(BOT_SYMBOL)
-			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
-			TURN_NUMBER++
-			return null
-		}
-		if ( TURN_NUMBER < 3 ){
-			// Check for a Player win and block it
-			if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
-				[r, c] = check_for_win_play(PLAYER_SYMBOL)
-				GRID[r][c] = BOT_SYMBOL
-				$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
-				TURN_NUMBER++
-				return null
-			}
-		}
-		// Try for a random foolish move
-		make_a_foolish_move()
-		TURN_NUMBER++
-		return null
-	}
-}
-
-// ==================== MEDIUM LEVEL PLAY FUNCTION ===================
-
-
-
-
-
-
-
-
-
-// PLAY ACCORDING TO CURRENT LEVEL
+// Bot play handler
 function bot_play(turn){
 	if ( LEVEL == 0 ) easy_level()
 	if ( LEVEL == 0.5 ) medium_level()
@@ -443,38 +93,276 @@ function set_difficulty(value){
 	}
 }
 
+// Check for a possible row win
+function row_check(){
+	for(var r=0; r<3; ++r){
+		if ( GRID[r][0] == GRID[r][1] && GRID[r][0] == GRID[r][2] && GRID[r][2] != EMPTY_SYMBOL ) {
+			return [GRID[r][0], true]
+		}
+	}
+	return null
+}
 
-// PLAYER MOVE HANDLES AND MAKE BOT MOVE
-// BASICALLY HANDLES A PAIR OF MOVE: PLAYER => BOT
+// Check for a possible column win
+function col_check(){
+	for(var c=0; c<3; ++c){
+		if (GRID[0][c] == GRID[1][c] && GRID[0][c] == GRID[2][c] && GRID[2][c] != EMPTY_SYMBOL ) {
+			return [GRID[0][c], true]
+		}
+	}
+	return null
+}
+
+// Check for a diagonal win
+function diagonal_check(){
+	var d1 = GRID[0][0] == GRID[1][1] && GRID[0][0] == GRID[2][2] && GRID[2][2] != EMPTY_SYMBOL
+	var d2 = GRID[0][2] == GRID[1][1] && GRID[0][2] == GRID[2][0] && GRID[2][0] != EMPTY_SYMBOL
+	if ( d1 || d2 ) {
+		return [ GRID[1][1], true ]
+	}
+	return null
+}
+
+// Game over check
+function game_over_check(){
+	if ( row_check() != null ) return row_check(); // [winner_symbol, true]
+	if ( col_check() != null ) return col_check() // [winner_symbol, true]
+	if ( diagonal_check() != null ) return diagonal_check() // [winner_symbol, true]
+	for (var r=0; r<3; ++r) { // Check whether the game is still on
+		for (var c=0; c<3; ++c) {
+			if ( GRID[r][c] == EMPTY_SYMBOL ) {
+				return null // ensures game is not over
+			}
+		}
+	}
+	return [EMPTY_SYMBOL, true] // true stands for game over
+}
+
+// Show game result info.
+function post_game_over_action(symbol) {
+	if ( symbol == EMPTY_SYMBOL ){
+		$("#info").html("Draw! tight game!<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+	}else if ( symbol == BOT_SYMBOL ){
+		$('#info').html("Whoaa! Bot won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+	}else if ( symbol == PLAYER_SYMBOL ) {
+		$('#info').html("Congrats! You won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+	}
+}
+
+// Clears the GRID
+function clean_backend_grid(){
+	for ( var r=0; r<3; ++r ) {
+		for (var c = 0; c<3; ++c) {
+			GRID[r][c] = EMPTY_SYMBOL
+		}
+	}
+}
+
+// Clears the playground
+function clean_frontend_grid(){
+	$('#info').html('')
+	$('#row1-col1').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row1-col2').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row1-col3').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row2-col1').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row2-col2').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row2-col3').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row3-col1').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row3-col2').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row3-col3').removeClass('text-warning').removeClass('text-white').html('')
+}
+
+// Restarts the game by setting parameters to its initial values
+function restart_game(){
+	TURN_NUMBER = 0
+	GAME_OVER = false
+	clean_backend_grid()
+	clean_frontend_grid()
+}
+
+// Check for a row win move
+function check_for_a_row_win(r, symbol){
+	if ( GRID[r][0] == symbol && GRID[r][1] == symbol && GRID[r][2] == EMPTY_SYMBOL ) return [r, 2]
+	if ( GRID[r][0] == symbol && GRID[r][2] == symbol && GRID[r][1] == EMPTY_SYMBOL ) return [r, 1]
+	if ( GRID[r][1] == symbol && GRID[r][2] == symbol && GRID[r][0] == EMPTY_SYMBOL ) return [r, 0]
+	return null
+}
+
+// Check for a column win move
+function check_for_a_col_win(c, symbol){
+	if ( GRID[0][c] == symbol && GRID[1][c] == symbol && GRID[2][c] == EMPTY_SYMBOL ) return [2, c]
+	if ( GRID[0][c] == symbol && GRID[2][c] == symbol && GRID[1][c] == EMPTY_SYMBOL ) return [1, c]
+	if ( GRID[1][c] == symbol && GRID[2][c] == symbol && GRID[0][c] == EMPTY_SYMBOL ) return [0, c]
+	return null
+}
+
+// Check for a diagonal win move
+function check_for_a_diagonal_win(symbol){
+	// Diagonal 1
+	if ( GRID[0][0] == symbol && GRID[1][1] == symbol && GRID[2][2] == EMPTY_SYMBOL ) return [2, 2]
+	if ( GRID[0][0] ==  symbol && GRID[2][2] == symbol && GRID[1][1] == EMPTY_SYMBOL ) return [1, 1]
+	if ( GRID[1][1] == symbol && GRID[2][2] == symbol && GRID[0][0] == EMPTY_SYMBOL ) return [0, 0]
+	// Diagonal 2
+	if ( GRID[0][2] == symbol && GRID[1][1] == symbol && GRID[2][0] == EMPTY_SYMBOL ) return [2, 0]
+	if ( GRID[0][2] == symbol && GRID[2][0] == symbol && GRID[1][1] == EMPTY_SYMBOL ) return [1, 1]
+	if ( GRID[1][1] == symbol && GRID[2][0] == symbol && GRID[0][2] == EMPTY_SYMBOL ) return [0, 2]
+	return null
+}
+
+// Check possible winning move
+function check_for_win_play(symbol){
+	for ( var row=0; row<3; ++row ){
+		row_ck = check_for_a_row_win(row, symbol)
+		if ( row_ck != null ) return row_ck
+	}
+	for ( var col=0; col<3; ++col ){
+		col_ck = check_for_a_col_win(col, symbol)
+		if ( col_ck != null ) return col_ck
+	}
+	diag_ck = check_for_a_diagonal_win(symbol)
+	if ( diag_ck != null ) return diag_ck
+	return null
+}
+
+// Make a smart move
+function progressive_play(){
+	if ( GRID[0][0] == GRID[2][2] && GRID[0][0] == PLAYER_SYMBOL ) {
+		$('#'+get_selector_from_rc(1,0)).addClass('text-warning').html('&#10008;')
+		GRID[1][0] = BOT_SYMBOL; return
+	}
+	if ( GRID[0][2] == GRID[2][0] && GRID[0][2] == PLAYER_SYMBOL ) {
+		$('#'+get_selector_from_rc(1,2)).addClass('text-warning').html('&#10008;')
+		GRID[1][2] = BOT_SYMBOL; return
+	}
+	for(var index in CORNERS){
+		[r, c] = CORNERS[index]
+		if ( GRID[r][c] == EMPTY_SYMBOL ){
+			GRID[r][c] = BOT_SYMBOL
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+			return
+		}
+	}
+	for(var index in MIDDLES){
+		[r, c] = MIDDLES[index]
+		if ( GRID[r][c] == EMPTY_SYMBOL ) {
+			GRID[r][c] = BOT_SYMBOL
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+			return
+		}
+	}
+}
+
+// BOT play for level => hard
+function hard_level(){
+	if ( TURN_NUMBER == 0 ) { // First turn
+		if ( GRID[1][1] == PLAYER_SYMBOL ) {
+			[r, c] = random_corner_choice()
+			GRID[r][c] = BOT_SYMBOL
+			selector = get_selector_from_rc(r,c)
+		}else{
+			GRID[1][1] = BOT_SYMBOL
+			selector = get_selector_from_rc(1,1)
+		}
+		TURN_NUMBER++
+		$('#'+selector).addClass('text-warning').html('&#10008;') // cross icon
+		return null
+	}else{
+		if ( check_for_win_play(BOT_SYMBOL) != null ) { // Try for a win move
+			[r, c] = check_for_win_play(BOT_SYMBOL)
+			GRID[r][c] = BOT_SYMBOL
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+			return null
+		}
+		if ( check_for_win_play(PLAYER_SYMBOL) != null ) { // block player win
+			[r, c] = check_for_win_play(PLAYER_SYMBOL)
+			GRID[r][c] = BOT_SYMBOL
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+			return null
+		}
+		progressive_play() // Try for a progressive win play
+		return null
+	}
+}
+
+// Make a random irational move
+function make_a_foolish_move() {
+	easy_level();
+}
+
+// BOT play for level => medium
+function medium_level(){
+	if ( TURN_NUMBER == 0 ) { // First turn
+		if ( GRID[1][1] == PLAYER_SYMBOL ) {
+			[r, c] = random_corner_choice()
+			GRID[r][c] = BOT_SYMBOL
+			selector = get_selector_from_rc(r,c)
+		}else{
+			GRID[1][1] = BOT_SYMBOL
+			selector = get_selector_from_rc(1,1)
+		}
+		TURN_NUMBER++
+		$('#'+selector).addClass('text-warning').html('&#10008;') // cross icon
+		return null
+	}else{
+		if ( check_for_win_play(BOT_SYMBOL) != null ) { // Try for a win
+			[r, c] = check_for_win_play(BOT_SYMBOL)
+			GRID[r][c] = BOT_SYMBOL
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+			TURN_NUMBER++
+			return null
+		}
+		if ( TURN_NUMBER < 3 ){ // Block player win
+			if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
+				[r, c] = check_for_win_play(PLAYER_SYMBOL)
+				GRID[r][c] = BOT_SYMBOL
+				$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+				TURN_NUMBER++
+				return null
+			}
+		}
+		make_a_foolish_move() // make foolish move
+		TURN_NUMBER++
+		return null
+	}
+}
+
+// BOT play for level => easy
+function easy_level(){
+	if ( check_for_win_play(BOT_SYMBOL) != null ) {
+		[r, c] = check_for_win_play(BOT_SYMBOL)
+		GRID[r][c] = BOT_SYMBOL
+		$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
+		return null
+	}
+	while (true){
+		[r, c] = POSITIONS[randint(1,9)]
+		if ( GRID[r][c] == EMPTY_SYMBOL ){
+			GRID[r][c] = BOT_SYMBOL;
+			$('#'+get_selector_from_rc(r, c)).addClass('text-warning').html('&#10008;')
+			return
+		}
+	}
+}
+
+// Play handler
 function player_turn(ID){
-	/* 
-		allow to make change only if it's player's 
-		and not bot's turn
-	*/
 	if( !GAME_OVER ){
 		[r, c] = get_rc_from_selector(ID) // target position
 		if ( GRID[r][c] == '?' ) {
 			GRID[r][c] = PLAYER_SYMBOL;
-			// set tick icon for player
-			$('#'+ID).addClass('text-white').html('&#10004;')
-			// if game over
-			if ( game_over_check() != null ) { 
+			$('#'+ID).addClass('text-white').html('&#10004;') // set player icon
+			if ( game_over_check() != null ) { // if game over
 				GAME_OVER = true
-				// passing output symbol
-				post_game_over_action(game_over_check()[0])
+				post_game_over_action(game_over_check()[0]) // game_over_check()[0] = symbol 
 				return
 			}
-			// bot play
 			bot_play();
-			// if game over
-			if ( game_over_check() != null ) {
+			if ( game_over_check() != null ) { // if game over
 				GAME_OVER = true
-				// passing output symbol
 				post_game_over_action(game_over_check()[0])
 				return
 			}
 		}else{
-			// show position is already filled
 			alert("Position already filled.")
 		}
 	}else{
