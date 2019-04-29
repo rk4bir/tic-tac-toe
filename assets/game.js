@@ -143,11 +143,11 @@ function game_over_check(){
 
 function post_game_over_action(symbol) {
 	if ( symbol == EMPTY_SYMBOL ){
-		$("#info").html("Draw! Whatta match!<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+		$("#info").html("Draw! tight game!<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
 	}else if ( symbol == BOT_SYMBOL ){
-		$('#info').html("Ahha! Bot won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+		$('#info').html("Whoaa! Bot won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
 	}else if ( symbol == PLAYER_SYMBOL ) {
-		$('#info').html("Congrats! You won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
+		$('#info').html("Wow! You won the game.<br><br><button onclick='restart_game();' class='btn btn-sm btn-info'>Restart Game</button>")
 	}
 }
 
@@ -162,15 +162,15 @@ function clean_backend_grid(){
 
 function clean_frontend_grid(){
 	$('#info').html('')
-	$('#row1-col1').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row1-col2').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row1-col3').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row2-col1').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row2-col2').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row2-col3').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row3-col1').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row3-col2').removeClass('text-dark').removeClass('text-white').html('')
-	$('#row3-col3').removeClass('text-dark').removeClass('text-white').html('')
+	$('#row1-col1').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row1-col2').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row1-col3').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row2-col1').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row2-col2').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row2-col3').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row3-col1').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row3-col2').removeClass('text-warning').removeClass('text-white').html('')
+	$('#row3-col3').removeClass('text-warning').removeClass('text-white').html('')
 }
 
 function restart_game(){
@@ -253,18 +253,18 @@ function check_for_win_play(symbol){
 
 function progressive_play(){
 	if ( GRID[0][0] == GRID[2][2] && GRID[0][0] == PLAYER_SYMBOL ) {
-		$('#'+get_selector_from_rc(1,0)).addClass('text-dark').html('&#10008;')
+		$('#'+get_selector_from_rc(1,0)).addClass('text-warning').html('&#10008;')
 		GRID[1][0] = BOT_SYMBOL; return
 	}
 	if ( GRID[0][2] == GRID[2][0] && GRID[0][2] == PLAYER_SYMBOL ) {
-		$('#'+get_selector_from_rc(1,2)).addClass('text-dark').html('&#10008;')
+		$('#'+get_selector_from_rc(1,2)).addClass('text-warning').html('&#10008;')
 		GRID[1][2] = BOT_SYMBOL; return
 	}
 	for(var index in CORNERS){
 		[r, c] = CORNERS[index]
 		if ( GRID[r][c] == EMPTY_SYMBOL ){
 			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
 			return
 		}
 	}
@@ -272,7 +272,7 @@ function progressive_play(){
 		[r, c] = MIDDLES[index]
 		if ( GRID[r][c] == EMPTY_SYMBOL ) {
 			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
 			return
 		}
 	}
@@ -291,21 +291,21 @@ function hard_level(){
 			selector = get_selector_from_rc(1,1)
 		}
 		TURN_NUMBER++
-		$('#'+selector).addClass('text-dark').html('&#10008;') // cross icon
+		$('#'+selector).addClass('text-warning').html('&#10008;') // cross icon
 		return null
 	}else{
 		// Attempt for a BOT win
 		if ( check_for_win_play(BOT_SYMBOL) != null ) {
 			[r, c] = check_for_win_play(BOT_SYMBOL)
 			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
 			return null
 		}
 		// Check for a Player win and block it
 		if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
 			[r, c] = check_for_win_play(PLAYER_SYMBOL)
 			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
 			return null
 		}
 		// Try for a progressive win play
@@ -331,7 +331,7 @@ function easy_level(){
 		[r, c] = POSITIONS[randint(1,9)]
 		if ( GRID[r][c] == EMPTY_SYMBOL ){
 			GRID[r][c] = BOT_SYMBOL;
-			$('#'+get_selector_from_rc(r, c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r, c)).addClass('text-warning').html('&#10008;')
 			return
 		}
 	}
@@ -345,7 +345,7 @@ function make_a_foolish_move() {
 		[r, c] = POSITIONS[randint(1,9)]
 		if ( GRID[r][c] == EMPTY_SYMBOL ){
 			GRID[r][c] = BOT_SYMBOL;
-			$('#'+get_selector_from_rc(r, c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r, c)).addClass('text-warning').html('&#10008;')
 			return
 		}
 	}
@@ -364,14 +364,14 @@ function medium_level(){
 			selector = get_selector_from_rc(1,1)
 		}
 		TURN_NUMBER++
-		$('#'+selector).addClass('text-dark').html('&#10008;') // cross icon
+		$('#'+selector).addClass('text-warning').html('&#10008;') // cross icon
 		return null
 	}else{
 		// Attempt for a BOT win
 		if ( check_for_win_play(BOT_SYMBOL) != null ) {
 			[r, c] = check_for_win_play(BOT_SYMBOL)
 			GRID[r][c] = BOT_SYMBOL
-			$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+			$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
 			TURN_NUMBER++
 			return null
 		}
@@ -380,7 +380,7 @@ function medium_level(){
 			if ( check_for_win_play(PLAYER_SYMBOL) != null ) {
 				[r, c] = check_for_win_play(PLAYER_SYMBOL)
 				GRID[r][c] = BOT_SYMBOL
-				$('#'+get_selector_from_rc(r,c)).addClass('text-dark').html('&#10008;')
+				$('#'+get_selector_from_rc(r,c)).addClass('text-warning').html('&#10008;')
 				TURN_NUMBER++
 				return null
 			}
