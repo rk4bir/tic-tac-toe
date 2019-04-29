@@ -8,7 +8,9 @@ html, body{
 	background-size: cover;
 	background-attachment: fixed;}
 
-h1{font-size: 35px}
+h1{font-size: 30px}
+
+.project-title{margin-top: -30px;}
 
 .container-fluid{
 	background: #105e00; 
