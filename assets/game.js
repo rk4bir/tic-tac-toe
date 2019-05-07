@@ -21,7 +21,7 @@ function randint(min, max) {
 // Returns array length
 function array_len(ARRAY){
 	var len = 0;
-	for ( var el in ARRAY ){
+	for ( let el in ARRAY ){
 		len += 1;
 	}
 	return len
@@ -95,7 +95,7 @@ function set_difficulty(value){
 
 // Check for a possible row win
 function row_check(){
-	for(var r=0; r<3; ++r){
+	for(let r=0; r<3; ++r){
 		if ( GRID[r][0] == GRID[r][1] && GRID[r][0] == GRID[r][2] && GRID[r][2] != EMPTY_SYMBOL ) {
 			return [GRID[r][0], true]
 		}
@@ -105,7 +105,7 @@ function row_check(){
 
 // Check for a possible column win
 function col_check(){
-	for(var c=0; c<3; ++c){
+	for(let c=0; c<3; ++c){
 		if (GRID[0][c] == GRID[1][c] && GRID[0][c] == GRID[2][c] && GRID[2][c] != EMPTY_SYMBOL ) {
 			return [GRID[0][c], true]
 		}
@@ -128,7 +128,7 @@ function game_over_check(){
 	if ( row_check() != null ) return row_check(); // [winner_symbol, true]
 	if ( col_check() != null ) return col_check() // [winner_symbol, true]
 	if ( diagonal_check() != null ) return diagonal_check() // [winner_symbol, true]
-	for (var r=0; r<3; ++r) { // Check whether the game is still on
+	for (let r=0; r<3; ++r) { // Check whether the game is still on
 		for (var c=0; c<3; ++c) {
 			if ( GRID[r][c] == EMPTY_SYMBOL ) {
 				return null // ensures game is not over
@@ -151,7 +151,7 @@ function post_game_over_action(symbol) {
 
 // Clears the GRID
 function clean_backend_grid(){
-	for ( var r=0; r<3; ++r ) {
+	for ( let r=0; r<3; ++r ) {
 		for (var c = 0; c<3; ++c) {
 			GRID[r][c] = EMPTY_SYMBOL
 		}
@@ -211,11 +211,11 @@ function check_for_a_diagonal_win(symbol){
 
 // Check possible winning move
 function check_for_win_play(symbol){
-	for ( var row=0; row<3; ++row ){
+	for ( let row=0; row<3; ++row ){
 		row_ck = check_for_a_row_win(row, symbol)
 		if ( row_ck != null ) return row_ck
 	}
-	for ( var col=0; col<3; ++col ){
+	for ( let col=0; col<3; ++col ){
 		col_ck = check_for_a_col_win(col, symbol)
 		if ( col_ck != null ) return col_ck
 	}
@@ -234,7 +234,7 @@ function progressive_play(){
 		$('#'+get_selector_from_rc(1,2)).addClass('text-warning').html('&#10008;')
 		GRID[1][2] = BOT_SYMBOL; return
 	}
-	for(var index in CORNERS){
+	for(let index in CORNERS){
 		[r, c] = CORNERS[index]
 		if ( GRID[r][c] == EMPTY_SYMBOL ){
 			GRID[r][c] = BOT_SYMBOL
@@ -242,7 +242,7 @@ function progressive_play(){
 			return
 		}
 	}
-	for(var index in MIDDLES){
+	for(let index in MIDDLES){
 		[r, c] = MIDDLES[index]
 		if ( GRID[r][c] == EMPTY_SYMBOL ) {
 			GRID[r][c] = BOT_SYMBOL
